@@ -39,8 +39,17 @@ To start with Redux, you need to add Redux as a dependency of the project by run
 ```bash
 npm install redux
 ```
+Now that Redux has been added, the next step is to integrate it into your existing React components. First create the store by adding the code shown in the
+following listing to index.js.
+```python
+import { createStore } from 'redux';
+import todos from './redux/reducers'
 
-The first argument passed to the createStore function is a reducer. The store requires at least one reducer.
+const store = createStore(todos);
+...
+```
+The first argument passed to the createStore function is a reducer. The store requires at least one reducer. A reducer is a function that takes the current state of the store and an action and returns the new state after applying any updates
+
 ## Available Scripts
 
 In the project directory, you can run:
