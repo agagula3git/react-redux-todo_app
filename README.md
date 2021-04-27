@@ -48,71 +48,101 @@ import todos from './redux/reducers'
 const store = createStore(todos);
 ...
 ```
-The first argument passed to the createStore function is a reducer. The store requires at least one reducer. A reducer is a function that takes the current state of the store and an action and returns the new state after applying any updates
+The first argument passed to the createStore function is a reducer. The store requires at least one reducer. A reducer is a function that takes the current state of the store and an action and returns the new state after applying any updates.  
+  
 
-## Available Scripts
+Within the src directory, we'll create a new directory, redux, with an reducers.js and actions.js files. In reducers.js file,
+we’ll create and export a single function, reducer, that returns the given state, as shown in the following listing.
+```python
+export default function reducer(state = {todos: initTodos}, action){
+    switch(action.type){
+        case 'CREATE_TODO':
+            return{
+                todos: state.todos.concat(action.payload)
+            }
+        case 'EDIT_TODO':
+            const {payload} = action;
+            return{
+                todos: state.todos.map(todo =>{
+                    if(todo.id === payload.id){
+                        return Object.assign({}, todo, payload.params)
+                    }
+                    return todo;
+                })
+            }
+        default:
+            return state;
+    }
+}
+```
+Reducers check the action's type to determine if it should respond to it. In our application we're dispatching CREATE_TODO and EDIT_TODO actions, indicating an event has occured. If the action is CREATE_TODO, the function reducer adds todo-item to the array and return the result.  
+  
+If the action being passed in is of type EDIT_TODO, we'll update the current todo-item by iterating over the list of todos with map. If the current todo matches the ID from the payload, we should update it with the new params. If the action that has occurred can't be handled, we should return the given state.  
+  
+In actions.js file, we'll create two action creators - functions that return actions, createTodo and editTodo.
+```python
+export function createTodo({title, description}){
+    return{
+        type: 'CREATE_TODO',
+        payload: {
+            id: uniqueId(),
+            title,
+            description,
+            status: 'Unstarted'
+        }
+    }
+}
 
-In the project directory, you can run:
+export function editTodo(id, params={}){
+    return{
+        type: 'EDIT_TODO',
+        payload: {
+            id,
+            params
+        }
+    }
+}
+```
+App imports createTodo and editTodo action creators, and passes them required parameters. These action creators format and return an action with the payload property that contains all the data necessary to perform the action.
 
-### `npm start`
+### Connecting React and Redux with react-redux
+To connect Redux with React, we’ll use the React bindings from the react-redux package.
+react-redux gives you two primary tools for connecting your Redux store to React:
+* Provider — A React component that you’ll render at the top of the React app. Any components rendered as children of Provider can be granted access to the Redux store.
+* connect — A function used as a bridge between React components and data from the Redux store.  
+  
+Provider is a component that takes the store as a prop and wraps the top-level component in your app in this case, App. Any child component rendered within Provider can access the Redux store, no matter how deeply it’s nested. In index.js, import the Provider component and wrap the App component, using the code in the following listing.
+```python
+ReactDOM.render(
+  <Provider store={store}> 2
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
+```  
+  
+### Passing data from Redux to React components
+Now that we've created Redux store with a reducer, and used the Provider component from react-redux to make the store available to our React components, we should enhance a React component with connect. By adding connect to the App component, we declare it as an entry point for data from the Redux store.  
+  
+To connect all needed data from redux to React components, we'll use the function mapStateToProps in App.js file. Function mapStateToProps takes a first argument called state, and return a plain object containing the data that the connected component needs. For dispatching actions to the store, we use a function mapDispatchToProps. mapStateToProps and mapDispatchToProps will be passed to the function connect as its arguments.
+```python
+const mapStateToProps = state => {
+  return{
+    todos: state.todos
+  }
+}
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+const mapDispatchToProps = dispatch => {
+  return{
+    createTodo: (title, description)=>dispatch(createTodo(title,description)),
+    editTodo: (id, params)=>dispatch(editTodo(id,params))
+  }
+} 
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+```
+## 🙌 Contribution
+I hope that this project will help you to unlock new ideas and improve your skills. Should you need any further information, please do not hesitate to [contact](mailto:agagula3@etf.unsa.ba) me.  
+  
+Best regards,  
+Ajdin G.
