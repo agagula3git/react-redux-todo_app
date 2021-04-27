@@ -1,7 +1,8 @@
 # ReactJs | Redux - Building a Todo-List Application
 
-## General Info
-This project guides you through the set up and development of a simple todo-list application using Redux to manage its state. Through this web application, users can create a new todo-item with three properties: title, description, and status, see a list of all todo-items and change the status of a todo. For example, a todo may move from Unstarted, to In Progress, and finally to Completed.  
+This project guides you through the set up and development of a simple todo-list application using Redux to manage its state.  
+  
+Through this web application, users can create a new todo-item with three properties: title, description, and status, see a list of all todo-items and change the status of a todo. For example, a todo may move from Unstarted, to In Progress, and finally to Completed.  
   
 The layout of home page is given by the following image:    
 <img src="todo-test.PNG" width="80%" height="80%">  
