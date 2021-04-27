@@ -16,12 +16,22 @@ const initTodos = [
 ]
 
 export default function reducer(state = {todos: initTodos}, action){
-    if(action.type === 'CREATE_TODO'){
-        return {
-            todos: state.todos.concat(action.payload)
-        }
-    }
-    else{
-        return state;
+    switch(action.type){
+        case 'CREATE_TODO':
+            return{
+                todos: state.todos.concat(action.payload)
+            }
+        case 'EDIT_TODO':
+            const {payload} = action;
+            return{
+                todos: state.todos.map(todo =>{
+                    if(todo.id === payload.id){
+                        return Object.assign({}, todo, payload.params)
+                    }
+                    return todo;
+                })
+            }
+        default:
+            return state;
     }
 }

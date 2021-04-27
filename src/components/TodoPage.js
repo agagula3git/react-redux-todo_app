@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import './InputTask.css'
-import ViewTask from './ViewTask'
+import './TodoPage.css'
+import ViewTodos from './ViewTodos'
 
 export default function InputTask(props) {
     const [state, setState] = useState([]);
@@ -44,7 +44,7 @@ export default function InputTask(props) {
                         name="description"
                         value={state.description}
                         placeholder="Description"
-                        maxlength="50"
+                        maxLength="50"
                         onChange={handleChange}
                     />
                     <input 
@@ -54,7 +54,7 @@ export default function InputTask(props) {
                 </form> 
             </div>
             <div className="view-task">
-                <ViewTask todos={props.todos}/>
+                <ViewTodos todos={props.todos} onEditTodo={props.onEditTodo}/>
             </div>
         </div>
     )

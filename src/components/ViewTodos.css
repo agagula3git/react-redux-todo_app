@@ -1,0 +1,37 @@
+table{
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+th{
+    height: 60px;
+    width: 350px;
+    border-bottom: 2px solid rgb(177, 160, 160);
+    padding-bottom: 20px;
+    color: #fff;
+    font-size: 14pt;
+}
+
+td{
+    height: 60px;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 10pt;
+}
+
+tbody > tr{
+    background-color: #fff;
+}
+
+select{
+    border-radius: 5px;
+    background-color: #0563af;
+    color: white;
+    padding: 5px;
+    border: none;
+    width: 120px;
+    font-size: 12pt;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    -webkit-appearance: button;
+    appearance: button;
+    outline: none;
+}

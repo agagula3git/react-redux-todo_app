@@ -1,18 +1,15 @@
 import { connect } from 'react-redux';
 import './App.css';
 import Header from './components/Header';
-import InputTask from './components/InputTask';
-import { createTodo } from './redux/actions'
+import TodoPage from './components/TodoPage';
+import { createTodo, editTodo } from './redux/actions'
 
-function App(props){
+const App = props =>{
 
-  /*const onCreateTodo = ({ title, description })=>{
-    props.dispatch(createTodo(title, description))
-  }*/
   return (
-    <div>
+    <div className="App">
         <Header/>
-        <InputTask todos={props.todos} onCreateTodo={props.createTodo}/>
+        <TodoPage todos={props.todos} onCreateTodo={props.createTodo} onEditTodo={props.editTodo}/>
     </div>
   );
 }
@@ -25,7 +22,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return{
-    createTodo: (title, description)=>dispatch(createTodo(title,description))
+    createTodo: (title, description)=>dispatch(createTodo(title,description)),
+    editTodo: (id, params)=>dispatch(editTodo(id,params))
   }
 } 
 

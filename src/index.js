@@ -9,6 +9,7 @@ import reportWebVitals from './reportWebVitals';
 
 const store = createStore(todos);
 console.log(store.getState());
+
 ReactDOM.render(
   <Provider store={store}>
     <App />

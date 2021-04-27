@@ -14,3 +14,13 @@ export function createTodo({title, description}){
         }
     }
 }
+
+export function editTodo(id, params={}){
+    return{
+        type: 'EDIT_TODO',
+        payload: {
+            id,
+            params
+        }
+    }
+}
